@@ -85,6 +85,7 @@ class DocumentsReportsController extends Controller
             'email_contactname' => $request->email_contactname ?? '', 
             'email_contactemail' => $request->email_contactemail ?? '', 
             'email_contactext' => $request->email_contactext ?? '',
+            'mark_noa_sent' => $request->mark_noa_sent ?? 0,
             'userkey' => $request->header('X-User-Id')
         );
         // $postfields = array(
@@ -203,6 +204,7 @@ class DocumentsReportsController extends Controller
                 'email_contactname' => $request->email_contactname ?? '',
                 'email_contactemail' => $request->email_contactemail ?? '',
                 'email_contactext' => $request->email_contactext ?? '',
+                'mark_noa_sent' => $request->mark_noa_sent ?? 0,
                 'userkey' => $request->header('X-User-Id')
             );
             $postfields = json_encode($postfields);
