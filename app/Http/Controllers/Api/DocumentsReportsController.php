@@ -9,6 +9,7 @@ use App\Services\ApiLoggingService;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use PDO;
 
 
 class DocumentsReportsController extends Controller
@@ -1001,10 +1002,20 @@ class DocumentsReportsController extends Controller
     // getting full debtor list for generating excel report
     public function getFullDebtorListForReport(Request $request)
     {
-        $data = DB::select('web.SP_DebtorListAll');
+        $pdo = DB::connection()->getPdo();
+        $stmt = $pdo->prepare('EXEC web.SP_DebtorListAll');
+        $stmt->execute();
+        
+        // Fetch first result set (Debtor list with credit details)
+        $debtorList = $stmt->fetchAll(PDO::FETCH_OBJ);
+        
+        // Move to next result set (Past due information)
+        $stmt->nextRowset();
+        $pastDueList = $stmt->fetchAll(PDO::FETCH_OBJ);
         
         return response()->json([
-            'data' => $data
+            'debtorList' => $debtorList,
+            'pastDueList' => $pastDueList
         ]);
     }
     //endregion dashboard reports
